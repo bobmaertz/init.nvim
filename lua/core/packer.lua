@@ -31,6 +31,8 @@ return require('packer').startup(function(use)
   
   use("theprimeagen/harpoon")
   use("theprimeagen/vim-with-me")
+  use("theprimeagen/vim-be-good")
+
   use("mbbill/undotree")
   use("folke/zen-mode.nvim")
 
