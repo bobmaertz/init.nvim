@@ -41,6 +41,11 @@ return require('packer').startup(function(use)
   use("tpope/vim-fugitive")
   use("airblade/vim-gitgutter")
 
+
+-- File explorer - bridge until i can kick the iDE habits 
+  use("nvim-tree/nvim-tree.lua") 
+  use("nvim-tree/nvim-web-devicons") 
+
   use {
   "folke/which-key.nvim",
   config = function()
