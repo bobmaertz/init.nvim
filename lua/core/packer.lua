@@ -41,6 +41,8 @@ return require('packer').startup(function(use)
   use("tpope/vim-fugitive")
   use("airblade/vim-gitgutter")
 
+  -- Copilot 
+  use("github/copilot.vim") 
 
 -- File explorer - bridge until i can kick the iDE habits 
   use("nvim-tree/nvim-tree.lua") 
