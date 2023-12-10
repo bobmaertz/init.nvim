@@ -37,6 +37,13 @@ return require('packer').startup(function(use)
   use("folke/zen-mode.nvim")
 
   use("tpope/vim-commentary")
+
+  -- DAP 
+  use("mfussenegger/nvim-dap")
+  use("rcarriga/nvim-dap-ui")
+  use("leoluz/nvim-dap-go") 
+  use("theHamsta/nvim-dap-virtual-text")
+
   -- Git Integration 
   use("tpope/vim-fugitive")
   use("airblade/vim-gitgutter")
