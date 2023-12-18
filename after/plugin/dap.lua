@@ -1,4 +1,6 @@
-
+require('dap-go').setup()
+require('dapui').setup()
+require('nvim-dap-virtual-text').setup()
 
 -- Dap  
 vim.keymap.set('n', '<F1>', '<cmd>lua require"dap".continue()<CR>')
@@ -10,9 +12,4 @@ vim.keymap.set('n', '<leader>B', '<cmd>lua require"dap".set_breakpoint(vim.fn.in
 vim.keymap.set('n', '<leader>lp', '<cmd>lua require"dap".set_breakpoint(nil, nil, vim.fn.input("Log point message: "))<CR>')
 vim.keymap.set('n', '<leader>dr', '<cmd>lua require"dap".repl.open()<CR>')
 --vim.keymap.set('n', '<leader>dt', '<cmd>lua require"dap".debug_test()<CR>') 
-
-require('dap-go').setup()
-require('dapui').setup()
-require('nvim-dap-virtual-text').setup()
-
 
