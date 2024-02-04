@@ -30,8 +30,11 @@ return require('packer').startup(function(use)
   use("nvim-treesitter/playground")
   
   use("theprimeagen/harpoon")
+  
+  -- Vim Tutorials / Help 
   use("theprimeagen/vim-with-me")
   use("theprimeagen/vim-be-good")
+  use("wikitopian/hardmode") 
 
   use("mbbill/undotree")
   use("folke/zen-mode.nvim")
@@ -47,6 +50,11 @@ return require('packer').startup(function(use)
   -- Git Integration 
   use("tpope/vim-fugitive")
   use("airblade/vim-gitgutter")
+
+  -- DAP 
+  use("mfussenegger/nvim-dap")
+  use("rcarriga/nvim-dap-ui")
+  use("leoluz/nvim-dap-go")
 
   -- Copilot 
   use("github/copilot.vim") 
