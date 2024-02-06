@@ -8,6 +8,7 @@ vim.opt.termguicolors = true
 
 -- Shortcut to toggle the NvimTree
 vim.keymap.set('n', '<leader>x', ':NvimTreeToggle<CR>', nil)
+vim.keymap.set('n', '<leader>xf', ':NvimTreeFocus<CR>', nil)
 
 -- empty setup using defaults
 require("nvim-tree").setup(); 
