@@ -10,6 +10,11 @@ lspconfig.pyright.setup{
 }
 lspconfig.gopls.setup{
     capabilities = capabilities,
+    settings = {
+        gopls = {
+            buildFlags = {"-tags=testing"},
+        },
+    }
 }
 lspconfig.rust_analyzer.setup{
     capabilities = capabilities,
