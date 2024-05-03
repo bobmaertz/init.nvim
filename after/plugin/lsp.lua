@@ -7,6 +7,16 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 lspconfig.lua_ls.setup {
     capabilities = capabilities,
+    settings = {
+        Lua = {
+            diagnostics = {
+                globals = { 'vim' }
+            },
+            telemetry = {
+                enable = false,
+            },
+        },
+    }
 }
 
 lspconfig.pyright.setup {
@@ -73,4 +83,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end, opts)
     end,
 })
-
