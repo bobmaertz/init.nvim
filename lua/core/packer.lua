@@ -31,11 +31,6 @@ return require('packer').startup(function(use)
 
     use("theprimeagen/harpoon")
 
-    -- Vim Tutorials / Help
-    --  use("theprimeagen/vim-with-me")
-    --  use("theprimeagen/vim-be-good")
-    -- use("wikitopian/hardmode")
-
     use("mbbill/undotree")
     use("folke/zen-mode.nvim")
 
@@ -58,22 +53,19 @@ return require('packer').startup(function(use)
 
     --LSP Support
     use("williamboman/mason.nvim")
-
     use("neovim/nvim-lspconfig")
     use("williamboman/mason-lspconfig.nvim")
 
     -- Autocompletion
-    use("hrsh7th/nvim-cmp")
+    use("hrsh7th/nvim-cmp") -- Autocompletion plugin
     use("hrsh7th/cmp-buffer")
     use("hrsh7th/cmp-path")
-    use("saadparwaiz1/cmp_luasnip")
     use("hrsh7th/cmp-nvim-lsp")
-    use("hrsh7th/cmp-nvim-lua")
+    use("hrsh7th/cmp-nvim-lua") -- LSP Source for nvim-cpm
 
     -- Snippets
-    --		  {'L3MON4D3/LuaSnip'},
-    --		  {'rafamadriz/friendly-snippets'},
-
+    use("L3MON4D3/LuaSnip") -- snippet plugin
+    use("saadparwaiz1/cmp_luasnip") -- Snippets source for nvim-cmp
 
     -- File explorer - bridge until i can kick the iDE habits
     use("nvim-tree/nvim-tree.lua")
