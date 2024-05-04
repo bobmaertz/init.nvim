@@ -29,7 +29,10 @@ return require('packer').startup(function(use)
     use("nvim-treesitter/nvim-treesitter-context");
     use("nvim-treesitter/playground")
 
+    --Navigation
     use("theprimeagen/harpoon")
+    use("christoomey/vim-tmux-navigator")
+
 
     use("mbbill/undotree")
     use("folke/zen-mode.nvim")
@@ -64,9 +67,19 @@ return require('packer').startup(function(use)
     use("hrsh7th/cmp-nvim-lua") -- LSP Source for nvim-cpm
 
     -- Snippets
-    use("L3MON4D3/LuaSnip") -- snippet plugin
-    use("saadparwaiz1/cmp_luasnip") -- Snippets source for nvim-cmp
+    use("L3MON4D3/LuaSnip")             -- snippet plugin
+    use("saadparwaiz1/cmp_luasnip")     -- Snippets source for nvim-cmp
     use("rafamadriz/friendly-snippets") -- Snippets collection for VSCode like snippets
+
+
+    -- Testing
+    use {
+        "vim-test/vim-test",
+
+--        requires = { { 'preservim/vimux' } }
+
+    }
+
 
     -- File explorer - bridge until i can kick the iDE habits
     use("nvim-tree/nvim-tree.lua")
