@@ -66,6 +66,7 @@ return require('packer').startup(function(use)
     -- Snippets
     use("L3MON4D3/LuaSnip") -- snippet plugin
     use("saadparwaiz1/cmp_luasnip") -- Snippets source for nvim-cmp
+    use("rafamadriz/friendly-snippets") -- Snippets collection for VSCode like snippets
 
     -- File explorer - bridge until i can kick the iDE habits
     use("nvim-tree/nvim-tree.lua")
