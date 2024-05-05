@@ -30,7 +30,11 @@ return require('packer').startup(function(use)
     use("nvim-treesitter/playground")
 
     --Navigation
-    use("theprimeagen/harpoon")
+    use {
+        "theprimeagen/harpoon",
+        branch = "harpoon2",
+        requires = { { "nvim-lua/plenary.nvim" } }
+    }
     use("christoomey/vim-tmux-navigator")
 
 
@@ -75,9 +79,7 @@ return require('packer').startup(function(use)
     -- Testing
     use {
         "vim-test/vim-test",
-
---        requires = { { 'preservim/vimux' } }
-
+        --        requires = { { 'preservim/vimux' } }
     }
 
 
