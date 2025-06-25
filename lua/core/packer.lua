@@ -56,7 +56,10 @@ return require('packer').startup(function(use)
 
     -- Copilot
     use("github/copilot.vim")
-
+    use(
+      "CopilotC-Nvim/CopilotChat.nvim"
+      --   build = "make tiktoken", -- Only on MacOS or Linux
+    )
 
     --LSP Support
     use("williamboman/mason.nvim")
