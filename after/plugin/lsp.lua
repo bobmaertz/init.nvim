@@ -5,46 +5,61 @@ local lspconfig = require('lspconfig')
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-lspconfig.lua_ls.setup {
-    capabilities = capabilities,
-    settings = {
-        Lua = {
-            diagnostics = {
-                globals = { 'vim' }
-            },
-            telemetry = {
-                enable = false,
-            },
-        },
-    }
-}
-
-lspconfig.pyright.setup {
-    capabilities = capabilities,
-}
-
-lspconfig.gopls.setup {
-    capabilities = capabilities,
-    settings = {
-        gopls = {
-            buildFlags = { "-tags=testing" },
-            analyses = {
-                shadow = true,
-                unusedparams = true,
-            },
-            completeUnimported = true,
-            staticcheck = true,
-            gofumpt = true,
-        }
-    }
-}
-
-lspconfig.rust_analyzer.setup {
-    capabilities = capabilities,
-    settings = {
-        ["rust-analyzer"] = {},
-    }
-}
+require('mason-lspconfig').setup({
+    handlers = {
+        function(server_name)
+            lspconfig[server_name].setup {
+                capabilities = capabilities,
+            }
+        end,
+        -- You can also add specific server overrides here
+        ["lua_ls"] = function()
+            lspconfig.lua_ls.setup {
+                capabilities = capabilities,
+                settings = {
+                    Lua = {
+                        diagnostics = {
+                            globals = { 'vim' }
+                        },
+                        telemetry = {
+                            enable = false,
+                        },
+                    },
+                }
+            }
+        end,
+        ["pyright"] = function()
+            lspconfig.pyright.setup {
+                capabilities = capabilities,
+            }
+        end,
+        ["gopls"] = function()
+            lspconfig.gopls.setup {
+                capabilities = capabilities,
+                settings = {
+                    gopls = {
+                        buildFlags = { "-tags=testing" },
+                        analyses = {
+                            shadow = true,
+                            unusedparams = true,
+                        },
+                        completeUnimported = true,
+                        staticcheck = true,
+                        gofumpt = true,
+                    }
+                }
+            }
+        end,
+        ["rust_analyzer"] = function()
+            lspconfig.rust_analyzer.setup {
+                capabilities = capabilities,
+                settings = {
+                    ["rust-analyzer"] = {},
+                }
+            }
+        end,
+    },
+})
 
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)

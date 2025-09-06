@@ -1,3 +1,3 @@
-vim.cmd(":Copilot disable")
+-- Copilot is now managed by lazy.nvim and enabled by default
 
 
