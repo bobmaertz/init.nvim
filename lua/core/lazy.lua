@@ -224,19 +224,6 @@ return require('lazy').setup({
     event = { 'BufReadPost', 'BufNewFile' },
   },
 
-  -- Copilot
-  {
-    'github/copilot.vim',
-    event = 'InsertEnter',
-  },
-
-  {
-    'CopilotC-Nvim/CopilotChat.nvim',
-    dependencies = { 'github/copilot.vim' },
-    cmd = 'CopilotChat',
-    keys = { { '<leader>cc', '<cmd>CopilotChat<cr>', desc = 'Copilot Chat' } },
-  },
-
   -- LSP Support
   {
     'neovim/nvim-lspconfig',
