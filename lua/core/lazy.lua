@@ -107,7 +107,10 @@ return require('lazy').setup({
     build = ':TSUpdate',
     event = { 'BufReadPost', 'BufNewFile' },
     dependencies = {
-      'nvim-treesitter/nvim-treesitter-context',
+      -- Temporarily disabled: nvim-treesitter-context triggers a get_range
+      -- failure on Neovim 0.12 with markdown fenced code blocks / language
+      -- injection (nvim-treesitter#8618, neovim#39032, nvim-treesitter#8636).
+      -- 'nvim-treesitter/nvim-treesitter-context',
       'nvim-treesitter/playground',
     },
     config = function()
