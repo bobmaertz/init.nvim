@@ -1,69 +1,53 @@
 require("mason").setup()
 
-local lspconfig = require('lspconfig')
-
+-- Neovim 0.11+ native LSP configuration. Server definitions come from
+-- nvim-lspconfig's lsp/ directory; the old require('lspconfig') framework
+-- is deprecated and removed on 0.12-era nvim-lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-require('mason-lspconfig').setup({
-    handlers = {
-        function(server_name)
-            lspconfig[server_name].setup {
-                capabilities = capabilities,
-            }
-        end,
-        -- You can also add specific server overrides here
-        ["lua_ls"] = function()
-            lspconfig.lua_ls.setup {
-                capabilities = capabilities,
-                settings = {
-                    Lua = {
-                        diagnostics = {
-                            globals = { 'vim' }
-                        },
-                        telemetry = {
-                            enable = false,
-                        },
-                    },
-                }
-            }
-        end,
-        ["pyright"] = function()
-            lspconfig.pyright.setup {
-                capabilities = capabilities,
-            }
-        end,
-        ["gopls"] = function()
-            lspconfig.gopls.setup {
-                capabilities = capabilities,
-                settings = {
-                    gopls = {
-                        buildFlags = { "-tags=testing" },
-                        analyses = {
-                            shadow = true,
-                            unusedparams = true,
-                        },
-                        completeUnimported = true,
-                        staticcheck = true,
-                        gofumpt = true,
-                    }
-                }
-            }
-        end,
-        ["rust_analyzer"] = function()
-            lspconfig.rust_analyzer.setup {
-                capabilities = capabilities,
-                settings = {
-                    ["rust-analyzer"] = {},
-                }
-            }
-        end,
+-- Applied to every server
+vim.lsp.config('*', {
+    capabilities = capabilities,
+})
+
+-- Server-specific overrides (merged on top of nvim-lspconfig defaults)
+vim.lsp.config('lua_ls', {
+    settings = {
+        Lua = {
+            diagnostics = {
+                globals = { 'vim' }
+            },
+            telemetry = {
+                enable = false,
+            },
+        },
     },
 })
 
+vim.lsp.config('gopls', {
+    settings = {
+        gopls = {
+            buildFlags = { "-tags=testing" },
+            analyses = {
+                shadow = true,
+                unusedparams = true,
+            },
+            completeUnimported = true,
+            staticcheck = true,
+            gofumpt = true,
+        }
+    },
+})
+
+-- mason-lspconfig v2 automatically calls vim.lsp.enable() for every
+-- server installed through mason, so no handlers table is needed.
+require('mason-lspconfig').setup()
+
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+-- vim.diagnostic.goto_prev/goto_next were deprecated in 0.11 in favor of jump()
+vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end)
+vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
 
 -- Use LspAttach autocommand to only map the following keys

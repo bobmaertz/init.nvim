@@ -1,2 +1,0 @@
--- treesitter configuration is now handled by lazy.nvim
--- see lua/core/lazy.lua for the configuration
