@@ -86,9 +86,10 @@ return require('lazy').setup({
   },
 
   -- Telescope
+  -- Track master: the 0.1.x tags predate Neovim 0.11/0.12 and call
+  -- APIs that have since been removed.
   {
     'nvim-telescope/telescope.nvim',
-    tag = '0.1.4',
     dependencies = { 'nvim-lua/plenary.nvim' },
     cmd = 'Telescope',
     keys = {
@@ -102,27 +103,29 @@ return require('lazy').setup({
   },
 
   -- Treesitter
+  -- The legacy 'master' branch is frozen and breaks on Neovim 0.12 (it is
+  -- also what pulled in the treesitter-context get_range failure). The
+  -- 'main' rewrite targets 0.11+ and only installs parsers; highlighting
+  -- is started through core vim.treesitter.
+  -- The old 'playground' plugin is archived: use builtin :InspectTree,
+  -- :Inspect and :EditQuery instead.
   {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
     build = ':TSUpdate',
-    event = { 'BufReadPost', 'BufNewFile' },
-    dependencies = {
-      -- Temporarily disabled: nvim-treesitter-context triggers a get_range
-      -- failure on Neovim 0.12 with markdown fenced code blocks / language
-      -- injection (nvim-treesitter#8618, neovim#39032, nvim-treesitter#8636).
-      -- 'nvim-treesitter/nvim-treesitter-context',
-      'nvim-treesitter/playground',
-    },
+    lazy = false, -- the main branch does not support lazy-loading
     config = function()
-      require('nvim-treesitter.configs').setup {
-        ensure_installed = { "python", "vimdoc", "javascript", "typescript", "c", "lua", "rust", "go" },
-        sync_install = false,
-        auto_install = true,
-        highlight = {
-          enable = true,
-          additional_vim_regex_highlighting = false,
-        },
-      }
+      require('nvim-treesitter').install({
+        "python", "vimdoc", "javascript", "typescript", "c", "lua", "rust", "go",
+      })
+
+      -- Enable highlighting whenever a parser is available for the filetype
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('TreesitterHighlight', {}),
+        callback = function(args)
+          pcall(vim.treesitter.start, args.buf)
+        end,
+      })
     end,
   },
 
@@ -131,6 +134,9 @@ return require('lazy').setup({
     'theprimeagen/harpoon',
     branch = 'harpoon2',
     dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('harpoon'):setup()
+    end,
     keys = {
       { '<leader>a', function() require('harpoon'):list():add() end, desc = 'Harpoon add file' },
       { '<C-e>', function() require('harpoon').ui:toggle_quick_menu(require('harpoon'):list()) end },
@@ -180,6 +186,9 @@ return require('lazy').setup({
             },
           }
           require('zen-mode').toggle()
+          vim.wo.wrap = false
+          vim.wo.number = true
+          vim.wo.rnu = true
         end, desc = 'Zen Mode' },
       { '<leader>zZ', function()
           require('zen-mode').setup {
@@ -189,6 +198,10 @@ return require('lazy').setup({
             },
           }
           require('zen-mode').toggle()
+          vim.wo.wrap = false
+          vim.wo.number = false
+          vim.wo.rnu = false
+          vim.opt.colorcolumn = "0"
         end, desc = 'Zen Mode Narrow' },
     },
   },
@@ -204,6 +217,11 @@ return require('lazy').setup({
       'theHamsta/nvim-dap-virtual-text',
       'nvim-neotest/nvim-nio',
     },
+    config = function()
+      require('dap-go').setup()
+      require('dapui').setup()
+      require('nvim-dap-virtual-text').setup()
+    end,
     keys = {
       { '<F1>', function() require('dap').continue() end },
       { '<F2>', function() require('dap').step_over() end },
@@ -228,12 +246,15 @@ return require('lazy').setup({
   },
 
   -- LSP Support
+  -- mason moved to the mason-org organization; v2 of mason-lspconfig
+  -- drives the native vim.lsp.config()/vim.lsp.enable() API (0.11+)
+  -- instead of the deprecated require('lspconfig') framework.
   {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
+      'mason-org/mason.nvim',
+      'mason-org/mason-lspconfig.nvim',
     },
   },
 
@@ -303,6 +324,9 @@ return require('lazy').setup({
   -- Testing
   {
     'vim-test/vim-test',
+    init = function()
+      vim.g['test#strategy'] = 'neovim'
+    end,
     keys = {
       { '<leader>tf', '<cmd>TestFile<cr>', desc = 'Test file' },
       { '<leader>ts', '<cmd>TestSuite<cr>', desc = 'Test suite' },
