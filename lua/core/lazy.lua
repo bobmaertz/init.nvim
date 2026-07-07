@@ -90,16 +90,33 @@ return require('lazy').setup({
   -- APIs that have since been removed.
   {
     'nvim-telescope/telescope.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      -- Native fzf sorter: much faster file/grep pickers + fzf syntax
+      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+    },
     cmd = 'Telescope',
     keys = {
       { '<leader>pf', '<cmd>Telescope find_files<cr>', desc = 'Find files' },
       { '<leader>pg', '<cmd>Telescope git_files<cr>', desc = 'Git files' },
       { '<leader>ps', function()
           require('telescope.builtin').grep_string({ search = vim.fn.input("Grep > ") })
-        end, desc = 'Grep search' },
+        end, desc = 'Grep word under prompt' },
+      -- Type-as-you-search across the project (needs ripgrep)
+      { '<leader>pws', '<cmd>Telescope live_grep<cr>', desc = 'Live grep' },
+      -- Fuzzy-jump between open buffers instead of the file tree
+      { '<leader><leader>', '<cmd>Telescope buffers<cr>', desc = 'Open buffers' },
+      -- All LSP diagnostics in one picker
+      { '<leader>pd', '<cmd>Telescope diagnostics<cr>', desc = 'Diagnostics' },
+      -- Reopen the last picker exactly where you left it
+      { '<leader>pr', '<cmd>Telescope resume<cr>', desc = 'Resume last picker' },
       { '<leader>vh', '<cmd>Telescope help_tags<cr>', desc = 'Help tags' },
     },
+    config = function()
+      require('telescope').setup {}
+      -- Load the native fzf sorter once it's built
+      pcall(require('telescope').load_extension, 'fzf')
+    end,
   },
 
   -- Treesitter
@@ -139,13 +156,14 @@ return require('lazy').setup({
     end,
     keys = {
       { '<leader>a', function() require('harpoon'):list():add() end, desc = 'Harpoon add file' },
-      { '<C-e>', function() require('harpoon').ui:toggle_quick_menu(require('harpoon'):list()) end },
-      { '<C-j>', function() require('harpoon'):list():select(1) end },
-      { '<C-k>', function() require('harpoon'):list():select(2) end },
-      { '<C-l>', function() require('harpoon'):list():select(3) end },
-      { '<C-;>', function() require('harpoon'):list():select(4) end },
-      { '<C-S-P>', function() require('harpoon'):list():prev() end },
-      { '<C-S-N>', function() require('harpoon'):list():next() end },
+      { '<C-e>', function() require('harpoon').ui:toggle_quick_menu(require('harpoon'):list()) end, desc = 'Harpoon menu' },
+      -- <leader>1-4 jump to slots; C-h/j/k/l are left to vim-tmux-navigator
+      { '<leader>1', function() require('harpoon'):list():select(1) end, desc = 'Harpoon file 1' },
+      { '<leader>2', function() require('harpoon'):list():select(2) end, desc = 'Harpoon file 2' },
+      { '<leader>3', function() require('harpoon'):list():select(3) end, desc = 'Harpoon file 3' },
+      { '<leader>4', function() require('harpoon'):list():select(4) end, desc = 'Harpoon file 4' },
+      { '<leader>[', function() require('harpoon'):list():prev() end, desc = 'Harpoon prev file' },
+      { '<leader>]', function() require('harpoon'):list():next() end, desc = 'Harpoon next file' },
     },
   },
 
