@@ -44,11 +44,12 @@ vim.lsp.config('gopls', {
 -- server installed through mason, so no handlers table is needed.
 require('mason-lspconfig').setup()
 
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
--- vim.diagnostic.goto_prev/goto_next were deprecated in 0.11 in favor of jump()
-vim.keymap.set('n', '[d', function() vim.diagnostic.jump({ count = -1, float = true }) end)
-vim.keymap.set('n', ']d', function() vim.diagnostic.jump({ count = 1, float = true }) end)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+
+-- [d / ]d are builtin since 0.10; this keeps the float-on-jump behavior
+-- the old custom mappings had
+vim.diagnostic.config({ jump = { float = true } })
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
@@ -61,23 +62,25 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
         -- Buffer local mappings.
         -- See `:help vim.lsp.*` for documentation on any of the below functions
+        --
+        -- Builtins (0.11+) intentionally NOT remapped here:
+        --   K = hover, grr = references, gra = code action, grn = rename,
+        --   gri = implementation, [d/]d = diagnostics,
+        --   <C-s> (insert) = signature help
         local opts = { buffer = ev.buf }
         vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-        vim.keymap.set('n', '<C-s>', vim.lsp.buf.signature_help, opts)
-        vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-        vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-        vim.keymap.set('n', '<space>wl', function()
+        vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
+        vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
+        vim.keymap.set('n', '<leader>wl', function()
             print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
         end, opts)
-        vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-        vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
-        vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
-        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+        vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts)
+        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+        vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
 
-        vim.keymap.set('n', '<space>f', function()
+        vim.keymap.set('n', '<leader>f', function()
             vim.lsp.buf.format { async = true }
         end, opts)
     end,

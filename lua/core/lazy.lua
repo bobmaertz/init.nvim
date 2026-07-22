@@ -360,7 +360,9 @@ return require('lazy').setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     cmd = { 'NvimTreeToggle', 'NvimTreeFocus' },
     keys = {
-      { '<leader>x', '<cmd>NvimTreeToggle<cr>', desc = 'NvimTree toggle' },
+      -- xx/xf are siblings, not prefixes of each other, so the toggle
+      -- fires immediately instead of waiting out timeoutlen
+      { '<leader>xx', '<cmd>NvimTreeToggle<cr>', desc = 'NvimTree toggle' },
       { '<leader>xf', '<cmd>NvimTreeFocus<cr>', desc = 'NvimTree focus' },
     },
     config = function()
